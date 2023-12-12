@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "outFile": "./scripts/main.js",
+    "noImplicitAny": true,
+    "strict": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "strictNullChecks": true,
+    "removeComments": false,
+    "sourceMap": false,
+    "module": "amd",
+    "target": "es6",
+    "lib": ["dom", "es2015", "es2015.promise"],
+    "moduleResolution": "node"
+  },
+  "include": ["src/*"]
+}
