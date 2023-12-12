@@ -32,10 +32,6 @@ export async function process() {
       cancellationToken
     );
     await updateOutput();
-    const tabsOutput = M.Tabs.getInstance(
-      document.getElementById("tabsOutput")!
-    );
-    tabsOutput.select("output-pane");
   } catch (e: any) {
     console.log(e);
   }
