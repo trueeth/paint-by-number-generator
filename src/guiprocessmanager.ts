@@ -23,11 +23,22 @@ export class ProcessResult {
  *  Manages the GUI states & processes the image step by step
  */
 export class GUIProcessManager {
+  public static isCanvasBlank(canvas: HTMLCanvasElement) {
+    const context = canvas.getContext("2d")!;
+
+    const pixelBuffer = new Uint32Array(
+      context.getImageData(0, 0, canvas.width, canvas.height).data.buffer
+    );
+
+    return !pixelBuffer.some((color) => color !== 0);
+  }
+
   public static async process(
     settings: Settings,
     cancellationToken: CancellationToken
   ): Promise<ProcessResult> {
-    const c = document.getElementById("canvas") as HTMLCanvasElement;
+    const c = document.getElementById("input-image") as HTMLCanvasElement;
+
     const ctx = c.getContext("2d")!;
     let imgData = ctx.getImageData(0, 0, c.width, c.height);
 
@@ -140,6 +151,8 @@ export class GUIProcessManager {
     return processResult;
   }
 
+  public static displayItem = "result-image";
+
   private static async processKmeansClustering(
     imgData: ImageData,
     ctx: CanvasRenderingContext2D,
@@ -148,7 +161,9 @@ export class GUIProcessManager {
   ) {
     time("K-means clustering");
 
-    const cKmeans = document.getElementById("cKMeans") as HTMLCanvasElement;
+    const cKmeans = document.getElementById(
+      "svgContainer"
+    ) as HTMLCanvasElement;
     cKmeans.width = imgData.width;
     cKmeans.height = imgData.height;
 
@@ -208,7 +223,7 @@ export class GUIProcessManager {
   ) {
     time("Facet reduction");
     const cReduction = document.getElementById(
-      "cReduction"
+      "svgContainer"
     ) as HTMLCanvasElement;
     cReduction.width = facetResult.width;
     cReduction.height = facetResult.height;
@@ -256,7 +271,7 @@ export class GUIProcessManager {
   ) {
     time("Facet border tracing");
     const cBorderPath = document.getElementById(
-      "cBorderPath"
+      "svgContainer"
     ) as HTMLCanvasElement;
     cBorderPath.width = facetResult.width;
     cBorderPath.height = facetResult.height;
@@ -295,7 +310,7 @@ export class GUIProcessManager {
   ) {
     time("Facet border segmentation");
     const cBorderSegment = document.getElementById(
-      "cBorderSegmentation"
+      "svgContainer"
     ) as HTMLCanvasElement;
     cBorderSegment.width = facetResult.width;
     cBorderSegment.height = facetResult.height;
@@ -340,7 +355,7 @@ export class GUIProcessManager {
   ) {
     time("Facet label placement");
     const cLabelPlacement = document.getElementById(
-      "cLabelPlacement"
+      "svgContainer"
     ) as HTMLCanvasElement;
     cLabelPlacement.width = facetResult.width;
     cLabelPlacement.height = facetResult.height;

@@ -60,7 +60,8 @@ export async function updateOutput() {
         }
       }
     );
-    $("#svgContainer").empty().append(svg);
+    $("#svgContainer").css("display", "none");
+    $("#svgContainer").parent().append(svg);
     $("#palette")
       .empty()
       .append(createPaletteHtml(processResult.colorsByIndex));
@@ -161,29 +162,27 @@ export function downloadPNG() {
 }
 
 export function downloadSVG() {
-  if ($("#svgContainer svg").length > 0) {
-    const svgEl = $("#svgContainer svg").get(0) as any;
+  const svgEl = $("#svgContainer").siblings("svg").get(0) as any;
 
-    svgEl.setAttribute("xmlns", "http://www.w3.org/2000/svg");
-    const svgData = svgEl.outerHTML;
-    const preface = '<?xml version="1.0" standalone="no"?>\r\n';
-    const svgBlob = new Blob([preface, svgData], {
-      type: "image/svg+xml;charset=utf-8",
-    });
-    const svgUrl = URL.createObjectURL(svgBlob);
-    const downloadLink = document.createElement("a");
-    downloadLink.href = svgUrl;
-    downloadLink.download = "paintbynumbers.svg";
-    document.body.appendChild(downloadLink);
-    downloadLink.click();
-    document.body.removeChild(downloadLink);
-  }
+  svgEl.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+  const svgData = svgEl.outerHTML;
+  const preface = '<?xml version="1.0" standalone="no"?>\r\n';
+  const svgBlob = new Blob([preface, svgData], {
+    type: "image/svg+xml;charset=utf-8",
+  });
+  const svgUrl = URL.createObjectURL(svgBlob);
+  const downloadLink = document.createElement("a");
+  downloadLink.href = svgUrl;
+  downloadLink.download = "paintbynumbers.svg";
+  document.body.appendChild(downloadLink);
+  downloadLink.click();
+  document.body.removeChild(downloadLink);
 }
 
 export function loadExample(imgId: string) {
   // load image
   const img = document.getElementById(imgId) as HTMLImageElement;
-  const c = document.getElementById("canvas") as HTMLCanvasElement;
+  const c = document.getElementById("input-image") as HTMLCanvasElement;
   const ctx = c.getContext("2d")!;
   c.width = img.naturalWidth;
   c.height = img.naturalHeight;

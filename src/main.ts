@@ -1,11 +1,12 @@
 import { downloadPalettePng, downloadPNG, downloadSVG, process } from "./gui";
+import { GUIProcessManager } from "./guiprocessmanager";
 import { Clipboard } from "./lib/clipboard";
 
 $(document).ready(function () {
   // $(".tabs").tabs();
   $(".tooltipped").tooltip();
 
-  const clip = new Clipboard("canvas", true);
+  const clip = new Clipboard("input-image", true);
 
   $("#file").change(function (ev) {
     const files = (<HTMLInputElement>$("#file").get(0)).files;
@@ -14,7 +15,7 @@ $(document).ready(function () {
       reader.onloadend = function () {
         const img = document.createElement("img");
         img.onload = () => {
-          const c = document.getElementById("canvas") as HTMLCanvasElement;
+          const c = document.getElementById("input-image") as HTMLCanvasElement;
           const ctx = c.getContext("2d")!;
           c.width = img.naturalWidth;
           c.height = img.naturalHeight;
@@ -30,6 +31,13 @@ $(document).ready(function () {
   });
 
   $("#btnProcess").click(async function () {
+    if (
+      GUIProcessManager.isCanvasBlank(
+        document.getElementById("input-image") as HTMLCanvasElement
+      )
+    ) {
+      return;
+    }
     try {
       await process();
     } catch (err) {
@@ -39,13 +47,5 @@ $(document).ready(function () {
 
   $("#btnDownloadSVG").click(function () {
     downloadSVG();
-  });
-
-  $("#btnDownloadPNG").click(function () {
-    downloadPNG();
-  });
-
-  $("#btnDownloadPalettePNG").click(function () {
-    downloadPalettePng();
   });
 });
