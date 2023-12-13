@@ -20,14 +20,6 @@ export class Clipboard {
     this.ctx = this.canvas.getContext("2d")!;
     this.autoresize = autoresize;
 
-    // handlers
-    // document.addEventListener("keydown", function (e) {
-    //     _self.on_keyboard_action(e);
-    // }, false); // firefox fix
-    // document.addEventListener("keyup", function (e) {
-    //     _self.on_keyboardup_action(e);
-    // }, false); // firefox fix
-
     document.addEventListener(
       "paste",
       function (e) {

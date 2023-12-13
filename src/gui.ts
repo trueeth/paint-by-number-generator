@@ -2,7 +2,7 @@
  * Module that provides function the GUI uses and updates the DOM accordingly
  */
 
-import { CancellationToken, IMap, RGB } from "./common";
+import { CancellationToken, IMap, RGB, delay } from "./common";
 import { GUIProcessManager, ProcessResult } from "./guiprocessmanager";
 import { Settings } from "./settings";
 
@@ -40,7 +40,7 @@ export async function process() {
 export async function updateOutput() {
   if (processResult != null) {
     const showLabels = true;
-    const fill = true;
+    const fill = $("#chkFillFacets").prop("checked");
     const stroke = true;
     const sizeMultiplier = 3;
     const fontSize = 50;
@@ -60,7 +60,7 @@ export async function updateOutput() {
         }
       }
     );
-    $("#svgContainer").css("display", "none");
+    $("#svgContainer").siblings("svg").remove();
     $("#svgContainer").parent().append(svg);
     $("#palette")
       .empty()
@@ -161,9 +161,12 @@ export function downloadPNG() {
   }
 }
 
-export function downloadSVG() {
+export async function downloadSVG() {
   const svgEl = $("#svgContainer").siblings("svg").get(0) as any;
-
+  if (!svgEl) return;
+  $(".download-overlay").css("display", "block");
+  await delay(10000);
+  $(".download-overlay").css("display", "none");
   svgEl.setAttribute("xmlns", "http://www.w3.org/2000/svg");
   const svgData = svgEl.outerHTML;
   const preface = '<?xml version="1.0" standalone="no"?>\r\n';

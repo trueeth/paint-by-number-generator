@@ -29,4 +29,6 @@ export class Settings {
   public resizeImageHeight: number = 1024;
 
   public randomSeed: number = 0;
+
+  public limitCounts: number = 5;
 }
