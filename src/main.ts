@@ -30,8 +30,10 @@ const validProcessCounts = () => {
   if (
     cacheDates != null &&
     getDateDifference(cacheDates.toString(), currentDate.toDateString()) > 1
-  )
+  ) {
     countsProcess = 0;
+    localStorage.setItem(keyDates, currentDate.toDateString());
+  }
 
   countsProcess++;
 
