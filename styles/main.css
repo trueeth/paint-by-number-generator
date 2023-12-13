@@ -33,6 +33,12 @@
   margin-bottom: 60px;
 }
 
+.main-container {
+  display: flex;
+  max-width: 100%;
+  gap: 20px;
+}
+
 .overlay,
 .download-overlay {
   display: none;
@@ -67,6 +73,8 @@
 
 #input-pane,
 #output-pane {
+  margin-left: 1rem;
+  margin-right: 1rem;
   height: 60vh;
   overflow: auto;
   border-radius: 3px;

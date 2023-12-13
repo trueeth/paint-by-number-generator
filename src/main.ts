@@ -1,3 +1,4 @@
+import { read } from "fs";
 import { downloadSVG, process, updateOutput } from "./gui";
 import { GUIProcessManager } from "./guiprocessmanager";
 import { Clipboard } from "./lib/clipboard";
@@ -55,6 +56,47 @@ $(document).ready(function () {
 
   const clip = new Clipboard("input-image", true);
 
+  // --------------input image clipboard ------------------
+
+  $("#input-pane").on({
+    "dragover dragenter": function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    },
+    drop: function (e, ui) {
+      let dragEvent = e.originalEvent as DragEvent;
+      var dataTransfer = dragEvent.dataTransfer;
+      if (dataTransfer && dataTransfer.files.length) {
+        e.preventDefault();
+        e.stopPropagation();
+        $.each(dataTransfer.files, function (i, file) {
+          var reader = new FileReader();
+
+          reader.onload = (event: ProgressEvent<FileReader>) => {
+            const blobData = event.target?.result as string;
+            const img = new Image();
+            img.src = blobData;
+
+            img.onload = () => {
+              const canvas = <HTMLCanvasElement>(
+                document.getElementById("input-image")
+              );
+              $("#input-image").siblings("span").empty();
+              canvas.width = img.width;
+              canvas.height = img.height;
+              const ctx = canvas.getContext("2d")!;
+              ctx.clearRect(0, 0, img.width, img.height);
+              ctx.drawImage(img, 0, 0, img.width, img.height);
+            };
+          };
+
+          reader.readAsDataURL(file);
+        });
+      }
+    },
+  });
+
+  // --------------input image changed ------------------
   $("#input-file").on("change", function (ev) {
     const cKmeans = document.getElementById(
       "svgContainer"

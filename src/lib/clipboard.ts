@@ -23,6 +23,7 @@ export class Clipboard {
     document.addEventListener(
       "paste",
       function (e) {
+        console.log("input-image paste event");
         _self.paste_auto(e);
       },
       false
@@ -77,6 +78,7 @@ export class Clipboard {
 
   // default paste action
   private paste_auto(e: any) {
+    $("#input-image").siblings("span").empty();
     this.paste_event_support = false;
     if (this.pasteCatcher !== undefined) {
       this.pasteCatcher.innerHTML = "";
