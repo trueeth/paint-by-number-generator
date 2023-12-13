@@ -131,16 +131,16 @@ $(document).ready(function () {
   });
 
   $("#btnProcess").click(async function () {
-    if (!validProcessCounts()) {
-      alert("limit exceeded process counts");
-      return;
-    }
     if (
       GUIProcessManager.isCanvasBlank(
         document.getElementById("input-image") as HTMLCanvasElement
       )
     )
       return;
+    if (!validProcessCounts()) {
+      alert("limit exceeded process counts");
+      return;
+    }
     try {
       $(".overlay").css("display", "block");
       await process();
